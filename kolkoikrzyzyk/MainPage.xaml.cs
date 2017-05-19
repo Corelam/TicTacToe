@@ -40,6 +40,8 @@ namespace kolkoikrzyzyk
         {
             enabledAI = false;
             ButtonEnabler(buttonSI);
+            player1Name.Text = "Gracz X";
+            player2Name.Text = "Gracz O";
             player1Score = 0;
             player2Score = 0;
             Reset();
@@ -52,8 +54,8 @@ namespace kolkoikrzyzyk
             {
                 Title = "Kto zaczyna?",
                 Content = "Wybierz gracza:",
-                PrimaryButtonText = "Gracz X",
-                SecondaryButtonText = "Gracz O"
+                PrimaryButtonText = player1Name.Text,
+                SecondaryButtonText = player2Name.Text
             };
 
             ContentDialogResult result = await whoStarts.ShowAsync();
@@ -139,9 +141,55 @@ namespace kolkoikrzyzyk
         {
             enabledAI = true;
             ButtonDisabler(buttonSI);
+            player2Name.Text = "Komputer";
             SimpleAI();
         }
+        
+        private async void buttonPlayer1Name_Click(object sender, RoutedEventArgs e)
+        {
+            string nickname = await InputTextDialog("Wybierz imię dla gracza X:");
+            if (nickname.Length > 12 || nickname.Length == 0)
+            {
+                InfoDialog("Nieprawidłowa liczba znaków.");
+            }
+            else
+            {
+                player1Name.Text = nickname;
+            }
+        }
+
+        private async void buttonPlayer2Name_Click(object sender, RoutedEventArgs e)
+        {
+            string nickname = await InputTextDialog("Wybierz imię dla gracza O:");
+            if (nickname.Length > 12 || nickname.Length == 0)
+            {
+                InfoDialog("Nieprawidłowa liczba znaków.");
+            }
+            else
+            {
+                player2Name.Text = nickname;
+            }
+        }
         #endregion
+
+        /// <summary> Pokazuje okno dialogowe do wpisywania. </summary>
+        /// <param name="title"> Zapytanie do okna dialogowego. </param>
+        /// <returns> Zwraca wpisany tekst. </returns>
+        private async Task<string> InputTextDialog(string title)
+        {
+            TextBox inputTextBox = new TextBox();
+            inputTextBox.Height = 32;
+
+            ContentDialog dialog = new ContentDialog
+            {
+                PrimaryButtonText = "OK",
+                Title = title,
+                Content = inputTextBox
+            };
+
+            await dialog.ShowAsync();
+            return inputTextBox.Text;
+        }
 
         /// <summary> Prosta (losujaca) sztuczna inteligencja. </summary>
         private void SimpleAI()
@@ -232,7 +280,7 @@ namespace kolkoikrzyzyk
             score1.Text = player1Score.ToString();
             score2.Text = player2Score.ToString();
         }
-
+        
         /// <summary> Funkcja sprawdzajaca, czy ktos wygral. </summary>
         private void CheckWin()
         {
@@ -280,8 +328,8 @@ namespace kolkoikrzyzyk
             }
         }
 
-        /// <summary> Funkcja, ktora wyswietla komunikat o zwyciezcy. </summary>
-        private async void WinDialog(string winnerText)
+        /// <summary> Funkcja, ktora wyswietla komunikat informacyjny. </summary>
+        private async void InfoDialog(string text)
         {
             ContentDialog dialog = new ContentDialog
             {
@@ -289,7 +337,7 @@ namespace kolkoikrzyzyk
                 PrimaryButtonText = "OK",
                 Content = new TextBlock
                 {
-                    Text = winnerText,
+                    Text = text,
                     FontSize = 24
                 }
             };
@@ -301,17 +349,17 @@ namespace kolkoikrzyzyk
         {
             if (playerNumber == 1)
             {
-                WinDialog("Zwyciężył Gracz: X");
+                InfoDialog("Zwyciężył " + player1Name.Text);
                 player1Score += 1;
             }
             else if (playerNumber == 2)
             {
-                WinDialog("Zwyciężył Gracz: O");
+                InfoDialog("Zwyciężył " + player2Name.Text);
                 player2Score += 1;
             }
             else
             {
-                WinDialog("Remis");
+                InfoDialog("Remis");
             }
             
             Reset();
