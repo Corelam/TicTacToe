@@ -264,7 +264,7 @@
             </SplitView.Content>
         </SplitView>
 
-        <Grid Background="DarkGray" Grid.Row="1" Margin="50,0,0,0">
+        <Grid Background="DarkGray" Margin="50,0,0,0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -319,16 +319,16 @@
             <Button x:Name="button9" Margin="5,5,5,5" Content="" Click="button9_Click" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource GameButtonStyle}"/>
         </Grid>
 
-
+        <!-- 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- <Button x:Name="buttonReset" Content="Nowa gra" Click="buttonReset_Click" Background="IndianRed" Grid.Column="0" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource NewGameButtonStyle}"/>
-            <Button x:Name="buttonSI"    Content="Włącz SI" Click="buttonSI_Click"    Background="SlateBlue" Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AIButtonStyle}" /> -->
-        </Grid>
+            <Button x:Name="buttonReset" Content="Nowa gra" Click="buttonReset_Click" Background="IndianRed" Grid.Column="0" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource NewGameButtonStyle}"/>
+            <Button x:Name="buttonSI"    Content="Włącz SI" Click="buttonSI_Click"    Background="SlateBlue" Grid.Column="1" Margin="5,5,5,5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Style="{StaticResource AIButtonStyle}" />
+        </Grid> -->
 
         <TextBlock Margin="1,1,3,3" HorizontalAlignment="Right" Grid.Row="4" TextWrapping="Wrap" Text="© Marcin Byś" VerticalAlignment="Bottom"/>
     </Grid>
