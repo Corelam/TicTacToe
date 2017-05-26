@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Storage;
+using System.Diagnostics;
 
 namespace kolkoikrzyzyk
 {
@@ -169,6 +171,16 @@ namespace kolkoikrzyzyk
             {
                 player2Name.Text = nickname;
             }
+        }
+        
+        private void buttonPlayer1Score_Click(object sender, RoutedEventArgs e)
+        {
+            ReadScoreFromFile(1);
+        }
+
+        private void buttonPlayer2Score_Click(object sender, RoutedEventArgs e)
+        {
+            ReadScoreFromFile(2);
         }
         #endregion
 
@@ -351,11 +363,13 @@ namespace kolkoikrzyzyk
             {
                 InfoDialog("Zwyciężył " + player1Name.Text);
                 player1Score += 1;
+                SaveScoreToFile(1);
             }
             else if (playerNumber == 2)
             {
                 InfoDialog("Zwyciężył " + player2Name.Text);
                 player2Score += 1;
+                SaveScoreToFile(2);
             }
             else
             {
@@ -381,5 +395,67 @@ namespace kolkoikrzyzyk
             UpdateScore();
             Display();
         }
+        
+        private async void SaveScoreToFile(int player)
+        {
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile scoreFile;
+
+            if (player.Equals(1))
+            {
+                scoreFile = await storageFolder.CreateFileAsync(player1Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                scoreFile = await storageFolder.GetFileAsync(player1Name.Text + ".txt");
+            }
+            else if (player.Equals(2))
+            {
+                scoreFile = await storageFolder.CreateFileAsync(player2Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                scoreFile = await storageFolder.GetFileAsync(player2Name.Text + ".txt");
+            }
+            else
+            {
+                throw new Exception("Błędny numer gracza (SaveScoreToFile).");
+            }
+            
+            string oldScore = await FileIO.ReadTextAsync(scoreFile);
+
+            if (!oldScore.Equals(""))
+            {
+                int newScore = Int32.Parse(oldScore) + 1;
+                await FileIO.WriteTextAsync(scoreFile, newScore.ToString());
+            }
+            else
+            {
+                await FileIO.WriteTextAsync(scoreFile, "1");
+            }
+        }
+
+        private async void ReadScoreFromFile(int player)
+        {
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile scoreFile;
+
+            if (player.Equals(1))
+            {
+                scoreFile = await storageFolder.CreateFileAsync(player1Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                scoreFile = await storageFolder.GetFileAsync(player1Name.Text + ".txt");
+            }
+            else if (player.Equals(2))
+            {
+                scoreFile = await storageFolder.CreateFileAsync(player2Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                scoreFile = await storageFolder.GetFileAsync(player2Name.Text + ".txt");
+            }
+            else
+            {
+                throw new Exception("Błędny numer gracza (ReadScoreFromFile).");
+            }
+            
+            string savedScore = await FileIO.ReadTextAsync(scoreFile);
+
+            Debug.WriteLine(savedScore);
+        }
     }
 }
+
+//DO ZROBIENIA:
+// - Po wpisaniu imienia żeby automatycznie aktualizowało wynik na ten z pliku (jeśli istnieje! albo żeby tworzyło plik (if file != null, else ...))
+// - Jeśli będzie samo aktualizowało wynik, usunąć 2 przyciski do wyświetlania.

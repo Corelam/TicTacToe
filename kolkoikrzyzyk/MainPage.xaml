@@ -254,6 +254,16 @@
                         <Button x:Name="buttonPlayer2Name" FontFamily="Segoe MDL2 Assets" Content="&#xE1D7;" Width="50" Height="50" Background="Transparent" Click="buttonPlayer2Name_Click"/>
                         <TextBlock Text="Nazwij gracza O" FontSize="18" VerticalAlignment="Center" />
                     </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="buttonPlayer1Score" FontFamily="Segoe MDL2 Assets" Content="&#xE1A7;" Width="50" Height="50" Background="Transparent" Click="buttonPlayer1Score_Click" />
+                        <TextBlock Text="Wyniki gracza X" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="buttonPlayer2Score" FontFamily="Segoe MDL2 Assets" Content="&#xE1E7;" Width="50" Height="50" Background="Transparent" Click="buttonPlayer2Score_Click" />
+                        <TextBlock Text="Wyniki gracza O" FontSize="18" VerticalAlignment="Center" />
+                    </StackPanel>
                 </StackPanel>
             </SplitView.Pane>
             <SplitView.Content>
