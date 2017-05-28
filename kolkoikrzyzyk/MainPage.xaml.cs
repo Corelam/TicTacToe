@@ -103,6 +103,7 @@ namespace kolkoikrzyzyk
             enabledAI = true;
             ButtonDisabler(buttonSI);
             player2Name.Text = "Komputer";
+            UpdateScore();
             SimpleAI();
         }
         
@@ -133,7 +134,62 @@ namespace kolkoikrzyzyk
                 ReadScoreFromFile(2);
             }
         }
-        
+
+        private async void buttonResetScoreFile_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new ContentDialog()
+            {
+                Title = "Reset wyników",
+                MaxWidth = this.ActualWidth
+            };
+
+            #region Zawartosc okna
+            var panel = new StackPanel();
+
+            panel.Children.Add(new TextBlock
+            {
+                Text = "Wybierz, którego gracza wyniki chcesz zresetować:",
+                TextWrapping = TextWrapping.Wrap,
+            });
+
+            CheckBox checkBox1 = new CheckBox();
+            checkBox1.Content = player1Name.Text;
+            panel.Children.Add(checkBox1);
+
+            CheckBox checkBox2 = new CheckBox();
+            checkBox2.Content = player2Name.Text;
+            panel.Children.Add(checkBox2);
+
+            dialog.Content = panel;
+            #endregion
+
+            dialog.PrimaryButtonText = "Ok";
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+                StorageFile scoreFile;
+
+                if (checkBox1.IsChecked.Equals(true))
+                {
+                    Debug.WriteLine("Zaznaczono " + player1Name.Text);
+                    scoreFile = await storageFolder.CreateFileAsync(player1Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                    scoreFile = await storageFolder.GetFileAsync(player1Name.Text + ".txt");
+                    await FileIO.WriteTextAsync(scoreFile, "0");
+                }
+                if (checkBox2.IsChecked.Equals(true))
+                {
+                    Debug.WriteLine("Zaznaczono " + player2Name.Text);
+                    scoreFile = await storageFolder.CreateFileAsync(player2Name.Text + ".txt", CreationCollisionOption.OpenIfExists);
+                    scoreFile = await storageFolder.GetFileAsync(player2Name.Text + ".txt");
+                    await FileIO.WriteTextAsync(scoreFile, "0");
+                }
+
+                UpdateScore();
+            }
+        }
+
         #endregion
 
         #region Zarzadzanie interfejsem gry
@@ -147,6 +203,7 @@ namespace kolkoikrzyzyk
 
             ContentDialog dialog = new ContentDialog
             {
+                MaxWidth = this.ActualWidth,
                 PrimaryButtonText = "OK",
                 Title = title,
                 Content = inputTextBox
@@ -323,6 +380,7 @@ namespace kolkoikrzyzyk
         {
             ContentDialog whoStarts = new ContentDialog
             {
+                MaxWidth = this.ActualWidth,
                 Title = "Kto zaczyna?",
                 Content = "Wybierz gracza:",
                 PrimaryButtonText = player1Name.Text,
@@ -466,6 +524,5 @@ namespace kolkoikrzyzyk
         }
 
         #endregion
-
     }
 }
